@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from library import PdfNavigator
 from dotenv import load_dotenv
-import os, warnings
+import os, warnings, time
 
 warnings.filterwarnings('ignore')
 
@@ -35,9 +35,15 @@ def result():
         file.save(file_path)
         
         try:
+            # 시작 시간 기록
+            start_time = time.time()
+            
             # PdfNavigator를 사용하여 PDF 분석 (번역 및 요약)
             navigator = PdfNavigator(file_path)
             result = navigator.run()
+            
+            # 종료 시간 기록 및 소요 시간 계산
+            duration = round(time.time() - start_time, 2)
             
             # 파일 분석 후 삭제 (공간 절약)
             # os.remove(file_path)
@@ -46,7 +52,8 @@ def result():
             return render_template("result.html", 
                                  summary=result.get('summary', '요약 결과가 없습니다.'), 
                                  translation=result.get('translation', '번역 결과가 없습니다.'),
-                                 file_path=file_path)
+                                 file_path=file_path,
+                                 duration=duration)
         except Exception as e:
             if os.path.exists(file_path):
                 os.remove(file_path)

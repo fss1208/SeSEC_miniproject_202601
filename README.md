@@ -1,5 +1,10 @@
 # 미니프로젝트 (1조. Insight Navigator)
 
+## GIT
+```bash
+git clone https://github.com/fss1208/SeSEC_miniproject_202601.git
+```
+
 ## 설치
 ```python
 python -m venv .venv

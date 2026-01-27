@@ -46,7 +46,13 @@
             <h1 class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-4 cursor-pointer" onclick="location.href='/'">
                 Insight Navigator
             </h1>
-            <p class="text-slate-400 text-lg">AI가 분석한 문서의 내용에 대해 궁금한 점을 물어보세요.</p>
+            <p class="text-slate-400 text-lg">
+                AI가 분석한 문서의 내용에 대해 궁금한 점을 물어보세요.
+                <span class="block mt-2 text-sm text-slate-500 font-medium">
+                    <svg class="w-4 h-4 inline-block mr-1 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    분석 소요 시간: <span class="text-blue-400">{{ duration }}</span>초
+                </span>
+            </p>
         </header>
 
         <!-- 탭 네비게이션 -->
