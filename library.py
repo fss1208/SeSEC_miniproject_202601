@@ -32,12 +32,14 @@ class InsightNavigator:
         # 요약을 위한 프롬프트 및 체인 설정
         summary_prompt = PromptTemplate(input_variables=['sentence'], 
             template="""
-Read the following text and summarize it by keeping only:
-- the main claim,
-- the supporting evidence,
-- and the conclusion.
+You are an expert editor.
+Summarize the following text for quick understanding by focusing only on:
+- key arguments,
+- essential evidence,
+- and the final conclusion.
 
-Write the summary in clear.
+Remove redundancy and unnecessary details.
+Ensure the original meaning is preserved.
 
 Text:
 {sentence}
