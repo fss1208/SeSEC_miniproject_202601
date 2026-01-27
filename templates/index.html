@@ -44,6 +44,22 @@
         <!-- 업로드 섹션 -->
         <div class="glass rounded-3xl p-8 mb-8 shadow-2xl transition-all hover:border-blue-500/50">
             <form id="upload-form" action="/result" method="POST" enctype="multipart/form-data">
+                <!-- LLM 모델 선택 영역 추가 -->
+                <div class="mb-8">
+                    <label for="model-select" class="block text-sm font-medium text-slate-400 mb-2 ml-1">AI 모델 선택</label>
+                    <div class="relative">
+                        <select id="model-select" name="model" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-3 px-4 appearance-none focus:outline-none focus:border-blue-500 transition-all text-slate-200">
+                            <option value="gpt-5-nano" selected>gpt-5-nano</option>
+                            <option value="gpt-5-mini">gpt-5-mini</option>
+                            <option value="gpt-4o-mini">gpt-4o-mini</option>
+                            <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-700 rounded-2xl p-12 transition-colors hover:bg-slate-800/30" id="drop-zone">
                     <svg class="w-16 h-16 text-blue-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -51,7 +67,7 @@
                     <p class="text-xl mb-4 text-slate-300">PDF 파일을 선택하거나 여기로 끌어다 놓으세요</p>
                     <input type="file" id="file-input" name="file" class="hidden" accept=".pdf">
                     <button type="button" id="select-btn" onclick="document.getElementById('file-input').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95">
-                        파일 선택하기
+                        파일 선택
                     </button>
                 </div>
                 <div id="file-info" class="mt-4 text-center hidden">

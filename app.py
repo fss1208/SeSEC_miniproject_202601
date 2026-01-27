@@ -34,12 +34,16 @@ def result():
         file_path = os.path.join(upload_folder, file.filename)
         file.save(file_path)
         
+        # 폼 데이터에서 모델 선택값 가져오기 (기본값: gpt-5-nano)
+        selected_model = request.form.get('model', 'gpt-5-nano')
+        
         try:
             # 시작 시간 기록
             start_time = time.time()
             
             # PdfNavigator를 사용하여 PDF 분석 (번역 및 요약)
-            navigator = PdfNavigator(file_path)
+            # 선택된 모델을 인자로 전달
+            navigator = PdfNavigator(file_path, llm_model=selected_model)
             result = navigator.run()
             
             # 종료 시간 기록 및 소요 시간 계산
@@ -53,7 +57,8 @@ def result():
                                  summary=result.get('summary', '요약 결과가 없습니다.'), 
                                  translation=result.get('translation', '번역 결과가 없습니다.'),
                                  file_path=file_path,
-                                 duration=duration)
+                                 duration=duration,
+                                 model=selected_model)
         except Exception as e:
             if os.path.exists(file_path):
                 os.remove(file_path)
