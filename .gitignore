@@ -1,0 +1,5 @@
+*.pyc
+.agent/rules/*.md
+.agent/workflows/*.md
+.venv/
+.env

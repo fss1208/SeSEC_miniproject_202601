@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분석 결과 - Insight Navigator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab-active {
+            color: #60a5fa;
+            border-bottom: 2px solid #60a5fa;
+        }
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+        }
+        .user-msg {
+            background: rgba(96, 165, 250, 0.2);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .ai-msg {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-200 p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- 헤더 섹션 -->
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-4 cursor-pointer" onclick="location.href='/'">
+                Insight Navigator
+            </h1>
+            <p class="text-slate-400 text-lg">AI가 분석한 문서의 내용에 대해 궁금한 점을 물어보세요.</p>
+        </header>
+
+        <!-- 탭 네비게이션 -->
+        <div class="flex justify-center space-x-4 md:space-x-8 mb-8 border-b border-slate-700/50">
+            <button id="tab-summary" onclick="switchTab('summary')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 tab-active">
+                핵심 요약
+            </button>
+            <button id="tab-translation" onclick="switchTab('translation')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 text-slate-500">
+                한글 번역본
+            </button>
+            <button id="tab-chat" onclick="switchTab('chat')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 text-slate-500">
+                AI 채팅
+            </button>
+        </div>
+
+        <!-- 결과 표시 섹션 -->
+        <div class="space-y-6">
+            <!-- 요약 콘텐츠 -->
+            <div id="content-summary" class="glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center text-purple-400">
+                    <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    문서의 핵심 인사이트
+                </h2>
+                <div class="text-slate-300 leading-relaxed whitespace-pre-line text-lg bg-white/5 p-6 rounded-2xl border border-white/5">
+                    {{ summary }}
+                </div>
+            </div>
+
+            <!-- 번역 콘텐츠 -->
+            <div id="content-translation" class="hidden glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center text-blue-400">
+                    <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 11.37 9.198 15.343 6 18.01"></path></svg>
+                    전체 번역 텍스트
+                </h2>
+                <div class="text-slate-300 leading-relaxed whitespace-pre-line overflow-y-auto max-h-[600px] pr-4 scrollbar-thin scrollbar-thumb-slate-700 bg-white/5 p-6 rounded-2xl border border-white/5">
+                    {{ translation }}
+                </div>
+            </div>
+
+            <!-- 채팅 콘텐츠 -->
+            <div id="content-chat" class="hidden glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center text-green-400">
+                    <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    AI와 대화하기
+                </h2>
+                
+                <!-- 채팅 내역 -->
+                <div id="chat-history" class="chat-container flex flex-col space-y-4 mb-6 pr-2 scrollbar-thin scrollbar-thumb-slate-700">
+                    <div class="ai-msg p-4 rounded-2xl max-w-[80%] text-slate-300 italic">
+                        안녕하세요! 분석한 PDF 내용에 대해 무엇이든 물어보세요.
+                    </div>
+                </div>
+
+                <!-- 입력창 -->
+                <div class="relative flex items-center">
+                    <input type="text" id="chat-input" placeholder="질문을 입력하세요..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 pr-24 focus:outline-none focus:border-blue-500 transition-all text-slate-200">
+                    <button id="send-btn" class="absolute right-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-semibold transition-all active:scale-95">
+                        질의
+                    </button>
+                </div>
+            </div>
+
+            <!-- 다시하기 버튼 -->
+            <div class="text-center pt-8">
+                <button onclick="location.href='/'" class="group relative inline-flex items-center justify-center px-8 py-3 font-semibold text-white transition-all duration-200 bg-slate-800 rounded-xl hover:bg-slate-700 focus:outline-none active:scale-95 shadow-lg border border-white/10">
+                    <svg class="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    다른 파일 분석하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const filePath = "{{ file_path }}";
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatHistory = document.getElementById('chat-history');
+
+        function switchTab(tab) {
+            const tabs = ['summary', 'translation', 'chat'];
+            tabs.forEach(t => {
+                const tabBtn = document.getElementById(`tab-${t}`);
+                const content = document.getElementById(`content-${t}`);
+                if (t === tab) {
+                    tabBtn.classList.add('tab-active');
+                    tabBtn.classList.remove('text-slate-500');
+                    content.classList.remove('hidden');
+                } else {
+                    tabBtn.classList.remove('tab-active');
+                    tabBtn.classList.add('text-slate-500');
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        async function sendMessage() {
+            const question = chatInput.value.trim();
+            if (!question) return;
+
+            // 사용자 메시지 추가
+            addChatMessage(question, 'user');
+            chatInput.value = '';
+            
+            // 로딩 시각화
+            const loadingMsg = addChatMessage('생각 중...', 'ai', true);
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ file_path: filePath, question: question })
+                });
+
+                const data = await response.json();
+                
+                chatHistory.removeChild(loadingMsg);
+                if (response.ok) {
+                    addChatMessage(data.answer, 'ai');
+                } else {
+                    addChatMessage('에러: ' + (data.error || '답변을 가져오지 못했습니다.'), 'ai');
+                }
+            } catch (error) {
+                chatHistory.removeChild(loadingMsg);
+                addChatMessage('통신 오류가 발생했습니다.', 'ai');
+            }
+        }
+
+        function addChatMessage(text, sender, isTemporary = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `${sender === 'user' ? 'user-msg ml-auto' : 'ai-msg'} p-4 rounded-2xl max-w-[85%] text-slate-300 shadow-lg`;
+            msgDiv.textContent = text;
+            chatHistory.appendChild(msgDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            return msgDiv;
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
