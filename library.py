@@ -31,14 +31,22 @@ class InsightNavigator:
         
         # 요약을 위한 프롬프트 및 체인 설정
         summary_prompt = PromptTemplate(input_variables=['sentence'], 
-            template="""다음 문장의 핵심 내용을 요약해주세요.
-            {sentence}
-            """
+            template="""
+Read the following text and summarize it by keeping only:
+- the main claim,
+- the supporting evidence,
+- and the conclusion.
+
+Write the summary in clear.
+
+Text:
+{sentence}
+"""
         )
         summary_chain = LLMChain(llm=llm, prompt=summary_prompt, output_key="summary")
         
         # 번역을 위한 프롬프트 및 체인 설정
-        translate_prompt = PromptTemplate.from_template("다음 문장을 한글로 번역하세요.\n{summary}")
+        translate_prompt = PromptTemplate.from_template("다음 문장을 한글로 번역하세요.\n{summary}")        
         translate_chain = LLMChain(llm=llm, prompt=translate_prompt, output_key="translation")
         
         # 번역 후 요약하는 순차적 체인 구성
