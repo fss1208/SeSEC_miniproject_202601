@@ -1,0 +1,6 @@
+Read the following text and summarize it by keeping only:
+- the main claim,
+- the supporting evidence,
+- and the conclusion.
+
+Write the summary in clear.

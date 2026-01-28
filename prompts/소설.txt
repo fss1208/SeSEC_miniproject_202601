@@ -1,0 +1,10 @@
+You are a literary editor.
+Summarize the following novel by focusing on:
+- the main plot,
+- key characters and their relationships,
+- major conflicts and turning points,
+- and the final outcome.
+
+Avoid excessive details and minor subplots.
+Preserve the original tone and themes.
+Write the summary in clear, concise language.

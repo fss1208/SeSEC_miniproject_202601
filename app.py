@@ -18,7 +18,13 @@ if not os.path.exists(upload_folder):
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    # prompts 폴더의 파일 목록 가져오기
+    prompt_files = []
+    prompt_dir = "prompts"
+    if os.path.exists(prompt_dir):
+        prompt_files = [f for f in os.listdir(prompt_dir) if os.path.isfile(os.path.join(prompt_dir, f))]
+    
+    return render_template("index.html", prompt_files=prompt_files)
 
 @app.route("/result", methods=["POST"])
 def result():
@@ -34,16 +40,26 @@ def result():
         file_path = os.path.join(upload_folder, file.filename)
         file.save(file_path)
         
-        # 폼 데이터에서 모델 선택값 가져오기 (기본값: gpt-5-nano)
+        # 폼 데이터에서 모델 및 프롬프트 선택값 가져오기 (기본값 설정)
         selected_model = request.form.get('model', 'gpt-5-nano')
+        selected_prompt_file = request.form.get('prompt_file')
         
+        # 선택된 프롬프트 파일 내용 읽기
+        sprompt = "다음 내용을 요약하세요."  # 기본값
+        if selected_prompt_file:
+            prompt_path = os.path.join("prompts", selected_prompt_file)
+            if os.path.exists(prompt_path):
+                with open(prompt_path, 'r', encoding='utf-8') as f:
+                    sprompt = f.read()
+                    print("", f"[{selected_prompt_file}]", sprompt, sep="\n")
+
         try:
             # 시작 시간 기록
             start_time = time.time()
             
             # PdfNavigator를 사용하여 PDF 분석 (번역 및 요약)
-            # 선택된 모델을 인자로 전달
-            navigator = PdfNavigator(file_path, llm_model=selected_model)
+            # 선택된 모델과 프롬프트를 인자로 전달
+            navigator = PdfNavigator(file_path, llm_model=selected_model, sprompt=sprompt)
             result = navigator.run()
             
             # 종료 시간 기록 및 소요 시간 계산

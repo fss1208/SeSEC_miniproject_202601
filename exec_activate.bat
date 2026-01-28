@@ -1,1 +1,2 @@
-.venv\Scripts\activate
+C:/ProgramData/anaconda3/Scripts/activate
+conda activate base

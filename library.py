@@ -17,7 +17,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 class InsightNavigator:
     """인사이트 추출 및 분석을 위한 기본 클래스"""
 
-    def __init__(self, document_list, llm_model):
+    def __init__(self, document_list, llm_model, sprompt="다음 내용을 요약하세요."):
         # 문서 리스트 저장
         self.document_list = document_list
         # 임베딩 설정
@@ -30,21 +30,9 @@ class InsightNavigator:
         self.qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=db.as_retriever())
         
         # 요약을 위한 프롬프트 및 체인 설정
-        summary_prompt = PromptTemplate(input_variables=['sentence'], 
-            template="""
-You are an expert editor.
-Summarize the following text for quick understanding by focusing only on:
-- key arguments,
-- essential evidence,
-- and the final conclusion.
-
-Remove redundancy and unnecessary details.
-Ensure the original meaning is preserved.
-
-Text:
-{sentence}
-"""
-        )
+        # sprompt를 템플릿에 직접 삽입하거나 partial_variables를 사용
+        template_format = f"{sprompt}\n\nText:\n{{sentence}}"
+        summary_prompt = PromptTemplate(input_variables=['sentence'], template=template_format)
         summary_chain = LLMChain(llm=llm, prompt=summary_prompt, output_key="summary")
         
         # 번역을 위한 프롬프트 및 체인 설정
@@ -80,9 +68,9 @@ Text:
 class PdfNavigator(InsightNavigator):
     """PDF 파일 분석을 위한 클래스"""
 
-    def __init__(self, pdf_file, llm_model):
+    def __init__(self, pdf_file, llm_model, sprompt):
         # PDF 문서를 로드한 후 부모 클래스 초기화
-        super().__init__(self._load_(pdf_file), llm_model)
+        super().__init__(self._load_(pdf_file), llm_model, sprompt)
 
     def _load_(self, file):
         # PDF 파일 로딩
@@ -95,9 +83,9 @@ class PdfNavigator(InsightNavigator):
 class GithubNavigator(InsightNavigator):
     """Github 레포지토리 분석을 위한 클래스"""
 
-    def __init__(self, url, path, branch="main", llm_model="gpt-4o-mini"):
+    def __init__(self, url, path, branch="main", llm_model="gpt-4o-mini", sprompt="다음 내용을 요약하세요."):
         # Github 문서를 로드한 후 부모 클래스 초기화
-        super().__init__(self._load_(url, path, branch), llm_model)
+        super().__init__(self._load_(url, path, branch), llm_model, sprompt)
 
     def _load_(self, url, path, branch="main"):
         # Git 레포지토리 로딩 (마크다운 파일만 필터링)
