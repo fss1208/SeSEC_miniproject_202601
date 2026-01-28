@@ -63,11 +63,11 @@
 
         <!-- 탭 네비게이션 -->
         <div class="flex justify-center space-x-4 md:space-x-8 mb-8 border-b border-slate-700/50">
-            <button id="tab-summary" onclick="switchTab('summary')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 tab-active">
-                핵심 요약
+            <button id="tab-translation" onclick="switchTab('translation')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 tab-active">
+                핵심 요약 (번역)
             </button>
-            <button id="tab-translation" onclick="switchTab('translation')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 text-slate-500">
-                한글 번역본
+            <button id="tab-summary" onclick="switchTab('summary')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 text-slate-500">
+                핵심 요약 (원문)
             </button>
             <button id="tab-chat" onclick="switchTab('chat')" class="pb-3 px-2 md:px-4 text-lg md:text-xl font-semibold transition-all hover:text-blue-400 text-slate-500">
                 AI 채팅
@@ -77,24 +77,24 @@
         <!-- 결과 표시 섹션 -->
         <div class="space-y-6">
             <!-- 요약 콘텐츠 -->
-            <div id="content-summary" class="glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
+            <div id="content-translation" class="glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
                 <h2 class="text-2xl font-bold mb-6 flex items-center text-purple-400">
                     <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    문서의 핵심 인사이트
+                    핵심 인사이트 (번역)
                 </h2>
                 <div class="text-slate-300 leading-relaxed whitespace-pre-line text-lg bg-white/5 p-6 rounded-2xl border border-white/5">
-                    {{ summary }}
+                    {{ translation }}
                 </div>
             </div>
-
+            
             <!-- 번역 콘텐츠 -->
-            <div id="content-translation" class="hidden glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
+            <div id="content-summary" class="hidden glass rounded-3xl p-6 md:p-8 shadow-xl border-t border-white/10 animate-fade-in">
                 <h2 class="text-2xl font-bold mb-6 flex items-center text-blue-400">
                     <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 11.37 9.198 15.343 6 18.01"></path></svg>
-                    전체 번역 텍스트
+                    핵심 인사이트 (원문)
                 </h2>
                 <div class="text-slate-300 leading-relaxed whitespace-pre-line overflow-y-auto max-h-[600px] pr-4 scrollbar-thin scrollbar-thumb-slate-700 bg-white/5 p-6 rounded-2xl border border-white/5">
-                    {{ translation }}
+                    {{ summary }}
                 </div>
             </div>
 
