@@ -1,8 +1,15 @@
-You are an expert editor.
-Summarize the following text for quick understanding by focusing only on:
-- key arguments,
-- essential evidence,
-- and the final conclusion.
+Infer the author's primary intent and summarize the document accordingly.
 
-Remove redundancy and unnecessary details.
-Ensure the original meaning is preserved.
+Steps:
+1. Infer why this document was written.
+2. Identify what the author wants the reader to think or do.
+3. Summarize only the information that serves that intent.
+
+Output format:
+- Inferred intent
+- Key supporting points
+- Final intended takeaway
+
+Rules:
+- Base inference only on the text.
+- Do not speculate beyond what is implied.
