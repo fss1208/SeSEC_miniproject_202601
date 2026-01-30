@@ -31,11 +31,13 @@
             background: rgba(96, 165, 250, 0.2);
             align-self: flex-end;
             border-bottom-right-radius: 4px;
+            white-space: pre-wrap;
         }
         .ai-msg {
             background: rgba(255, 255, 255, 0.1);
             align-self: flex-start;
             border-bottom-left-radius: 4px;
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -188,7 +190,7 @@
 
         function addChatMessage(text, sender, isTemporary = false) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = `${sender === 'user' ? 'user-msg ml-auto' : 'ai-msg'} p-4 rounded-2xl max-w-[85%] text-slate-300 shadow-lg`;
+            msgDiv.className = `${sender === 'user' ? 'user-msg ml-auto' : 'ai-msg'} p-4 rounded-2xl max-w-[85%] text-slate-300 shadow-lg whitespace-pre-wrap`;
             msgDiv.textContent = text;
             chatHistory.appendChild(msgDiv);
             chatHistory.scrollTop = chatHistory.scrollHeight;
