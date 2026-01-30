@@ -1,8 +1,0 @@
-You are an expert editor.
-Summarize the following text for quick understanding by focusing only on:
-- key arguments,
-- essential evidence,
-- and the final conclusion.
-
-Remove redundancy and unnecessary details.
-Ensure the original meaning is preserved.

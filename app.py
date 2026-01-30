@@ -23,7 +23,7 @@ def index():
     prompt_dir = "prompts"
     if os.path.exists(prompt_dir):
         prompt_files = [f for f in os.listdir(prompt_dir) if os.path.isfile(os.path.join(prompt_dir, f))]
-    
+        prompt_files.reverse()
     return render_template("index.html", prompt_files=prompt_files)
 
 @app.route("/result", methods=["POST"])
